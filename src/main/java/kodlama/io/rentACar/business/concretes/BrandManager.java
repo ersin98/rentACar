@@ -10,6 +10,7 @@ import kodlama.io.rentACar.business.requests.CreateBrandRequest;
 import kodlama.io.rentACar.business.requests.UpdateBrandRequest;
 import kodlama.io.rentACar.business.responses.GetAllBrandsResponse;
 import kodlama.io.rentACar.business.responses.GetByIdBrandsResponse;
+import kodlama.io.rentACar.business.rules.BrandBusinessRules;
 import kodlama.io.rentACar.core.utilities.mappers.ModelMapperService;
 import kodlama.io.rentACar.dataAcces.abstracts.BrandRepository;
 import kodlama.io.rentACar.entities.concretes.Brand;
@@ -20,7 +21,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class BrandManager implements BrandService {
 	private BrandRepository brandRepository;// gevşek bağlı sistem
-
+	private BrandBusinessRules brandBusinessRules;
 	private ModelMapperService modelMapperService;
 
 	@Override
@@ -46,6 +47,7 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public void add(CreateBrandRequest createBrandReques) {
+		this.brandBusinessRules.checkIfBrandNameExists(createBrandReques.getName());
 		// Brand brand = new Brand();
 		// brand.setName(createBrandReques.getName());
 		Brand brand = modelMapperService.forRequest().map(createBrandReques, Brand.class);
